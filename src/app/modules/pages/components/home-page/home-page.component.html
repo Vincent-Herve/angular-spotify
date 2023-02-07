@@ -1,0 +1,32 @@
+<h1>Home page</h1>
+<h2>oAuth info</h2>
+<table>
+  <tr>
+    <td>Access token</td>
+    <td>{{ accessToken }}</td>
+  </tr>
+  <tr>
+    <td>Expires at</td>
+    <td>{{ expiresAt | date : "M/d/yy, h:mm a" }}</td>
+  </tr>
+</table>
+
+<h2>User info</h2>
+<table *ngIf="userData">
+  <tr>
+    <td>Display name</td>
+    <td>{{ userData.display_name }}</td>
+  </tr>
+  <tr>
+    <td>Id</td>
+    <td>{{ userData.id }}</td>
+  </tr>
+  <tr>
+    <td>Email</td>
+    <td>{{ userData.email }}</td>
+  </tr>
+  <tr>
+    <td>Country</td>
+    <td>{{ userData.country }}</td>
+  </tr>
+</table>
