@@ -14,14 +14,5 @@ declare global {
 export class AppComponent implements OnInit {
   title = 'angular-spotify';
 
-  ngOnInit(): void {
-    window.onSpotifyIframeApiReady = (IFrameAPI: any) => {
-      let element = document.getElementById('embed-iframe');
-      let options = {
-        uri: 'spotify:episode:7makk4oTQel546B0PZlDM5',
-      };
-      let callback = (EmbedController: any) => {};
-      IFrameAPI.createController(element, options, callback);
-    };
-  }
+  ngOnInit(): void {}
 }

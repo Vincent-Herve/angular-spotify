@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: 'Spotify Medium';
+  src: url("./assets/fonts/spotify/Roboto-Regular.ttf");
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Spotify Medium';
+}

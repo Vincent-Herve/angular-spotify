@@ -8,6 +8,7 @@ import { AuthUtilsService } from './services/auth/auth-utils.service';
 import { AuthService } from './services/auth/auth.service';
 import { TokenStorageService } from './services/token-storage/token-storage.service';
 import { UtilsService } from './services/utils/utils.service';
+import { HeaderComponent } from './ui/layout/header/header.component';
 import { LayoutComponent } from './ui/layout/layout.component';
 
 const providers = [
@@ -23,7 +24,7 @@ const providers = [
 @NgModule({
   imports: [AppRoutingModule, AudioPlayerModule],
   exports: [],
-  declarations: [LayoutComponent],
+  declarations: [LayoutComponent, HeaderComponent],
   providers,
 })
 export class SharedModule {}

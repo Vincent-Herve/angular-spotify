@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/modules/shared/services/auth/auth.service';
 @Component({
   selector: 'app-login-with-spotify',
   templateUrl: 'login-with-spotify.component.html',
+  styleUrls: ['login-with-spotify.component.scss'],
 })
 export class LoginWithSpotifyComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
