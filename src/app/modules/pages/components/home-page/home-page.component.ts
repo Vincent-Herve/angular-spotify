@@ -5,6 +5,7 @@ import { TokenStorageService } from 'src/app/modules/shared/services/token-stora
 @Component({
   selector: 'app-home-page',
   templateUrl: 'home-page.component.html',
+  styleUrls: ['home-page.component.scss'],
 })
 export class HomePageComponent implements OnInit {
   userData: any;

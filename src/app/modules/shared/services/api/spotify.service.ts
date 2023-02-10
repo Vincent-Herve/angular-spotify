@@ -1,7 +1,15 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { meUrl, tokenUrl } from '../../constants/constant';
+import {
+  addItemsToPlaylist,
+  meUrl,
+  onePlaylistUrl,
+  postUsersPlaylistUrl,
+  tokenUrl,
+  getUsersPlaylistsUrl,
+  searchTracksUrl,
+} from '../../constants/constant';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -19,5 +27,25 @@ export class SpotifyService {
 
   getUserData(): Observable<any> {
     return this.http.get(meUrl);
+  }
+
+  getUsersPlaylists(userId: string): Observable<any> {
+    return this.http.get(getUsersPlaylistsUrl(userId));
+  }
+
+  getOnePlaylist(playlistId: string): Observable<any> {
+    return this.http.get(onePlaylistUrl(playlistId));
+  }
+
+  createUsersPlaylist(userId: string, body: any): Observable<any> {
+    return this.http.post(postUsersPlaylistUrl(userId), body);
+  }
+
+  addItemsToPlaylist(playlistId: string, body: any): Observable<any> {
+    return this.http.get(addItemsToPlaylist(playlistId));
+  }
+
+  searchTracks(queryParam: string): Observable<any> {
+    return this.http.get(searchTracksUrl(queryParam));
   }
 }

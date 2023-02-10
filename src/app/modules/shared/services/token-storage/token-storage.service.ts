@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 const ACCESS_TOKEN_KEY = 'access_token';
+const USER_ID_KEY = 'user_id';
 const EXPIRES_AT_KEY = 'expires_at';
 const CODE_VERIFIER_KEY = 'code_verifier';
 
@@ -10,6 +11,10 @@ export class TokenStorageService {
 
   get accessToken(): string | null {
     return localStorage.getItem(ACCESS_TOKEN_KEY);
+  }
+
+  get userId(): string | null {
+    return localStorage.getItem(USER_ID_KEY);
   }
 
   get expiresAt(): string | null {
@@ -31,6 +36,10 @@ export class TokenStorageService {
   saveTokenResponse(accessToken: string, expiresAt: string): void {
     localStorage.setItem('access_token', accessToken);
     localStorage.setItem('expires_at', expiresAt);
+  }
+
+  saveUserId(userId: string): void {
+    localStorage.setItem('user_id', userId);
   }
 
   clearLocalStorage(): void {

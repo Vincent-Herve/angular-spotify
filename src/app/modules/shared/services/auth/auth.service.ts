@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { map, Observable } from 'rxjs';
 import { authConfigParameters } from '../../configs/auth/auth.config';
 import { authorizeUrl } from '../../constants/constant';
 import { SpotifyService } from '../api/spotify.service';
@@ -59,6 +60,9 @@ export class AuthService {
       .toString();
 
     this.tokenStorage.saveTokenResponse(accessToken, expiresAt);
+    this.getUserId().subscribe((userId) => {
+      this.tokenStorage.saveUserId(userId);
+    });
   }
 
   private requestToken(body: any): void {
@@ -67,5 +71,9 @@ export class AuthService {
 
       this.router.navigate(['/home']);
     });
+  }
+
+  private getUserId(): Observable<string> {
+    return this.spotifyService.getUserData().pipe(map((data) => data.id));
   }
 }

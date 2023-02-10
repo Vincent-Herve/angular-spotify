@@ -1,0 +1,38 @@
+<div>
+  <h2>Create one playlist</h2>
+  <form [formGroup]="createForm" (ngSubmit)="submit()">
+    <input
+      type="text"
+      pInputText
+      placeholder="Name"
+      [style.margin-right]="'1rem'"
+      formControlName="name"
+    />
+    <input
+      type="text"
+      pInputText
+      placeholder="Description"
+      formControlName="description"
+    />
+    <p>Search music and add it to your new playlist</p>
+    <input
+      type="text"
+      pInputText
+      placeholder="Search"
+      [(ngModel)]="search"
+      [ngModelOptions]="{ standalone: true }"
+    />
+    <button type="button" (click)="searchTracks()">Search</button>
+    <ul *ngIf="tracks$ | async">
+      <li
+        *ngFor="let track of tracks$ | async"
+        (click)="setCurrentTrackToAudioPlayer(track.uri)"
+      >
+        {{ track.name }}
+      </li>
+    </ul>
+    <div>
+      <button type="submit">Create playlist</button>
+    </div>
+  </form>
+</div>

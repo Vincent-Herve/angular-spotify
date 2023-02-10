@@ -1,0 +1,11 @@
+<div>
+  <h2>My playlists</h2>
+  <ul>
+    <li *ngFor="let playlist of (playlists$ | async)?.items">
+      <p-card>{{ playlist.name }}</p-card>
+    </li>
+    <li>
+      <a routerLink="create"><p-card class="card">Add playlist</p-card></a>
+    </li>
+  </ul>
+</div>
