@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { SpotifyService } from 'src/app/modules/shared/services/api/spotify.service';
 import { TokenStorageService } from 'src/app/modules/shared/services/token-storage/token-storage.service';
 
@@ -8,7 +9,7 @@ import { TokenStorageService } from 'src/app/modules/shared/services/token-stora
   styleUrls: ['home-page.component.scss'],
 })
 export class HomePageComponent implements OnInit {
-  userData: any;
+  userData$: Observable<any>;
 
   constructor(
     private tokenStorage: TokenStorageService,
@@ -16,9 +17,7 @@ export class HomePageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.spotifyService
-      .getUserData()
-      .subscribe((data) => (this.userData = data));
+    this.userData$ = this.spotifyService.getUserData();
   }
 
   get accessToken(): string | null {

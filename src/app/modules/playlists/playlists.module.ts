@@ -7,6 +7,7 @@ import { CardModule } from 'primeng/card';
 import { LayoutRoutingModule } from '../layout/layout-routing.module';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 const playlistsComponents = [
   PlaylistsListComponent,

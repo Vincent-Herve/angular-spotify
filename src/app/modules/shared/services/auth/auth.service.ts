@@ -65,7 +65,7 @@ export class AuthService {
     });
   }
 
-  private requestToken(body: any): void {
+  private requestToken(body: URLSearchParams): void {
     this.spotifyService.requestToken(body).subscribe((data) => {
       this.processTokenResponse(data);
 

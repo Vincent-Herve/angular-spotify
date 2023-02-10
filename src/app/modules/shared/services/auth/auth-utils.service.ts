@@ -25,10 +25,6 @@ export class AuthUtilsService {
     return urlObject.toString();
   }
 
-  handleError(error: any): void {
-    console.error(error);
-  }
-
   async generateCodeChallenge(codeVerifier: string): Promise<string> {
     const digest = await crypto.subtle.digest(
       'SHA-256',

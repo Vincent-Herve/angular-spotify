@@ -12,6 +12,10 @@ export class AudioPlayerComponent implements OnInit {
   ngOnInit() {
     this.loadSpotifyScript();
     this.handleSpotifyIframeApiReady();
+
+    this.audioPlayer.currentTrack.subscribe((trackId) => {
+      this.editIFrameSrcAttribute(trackId);
+    });
   }
 
   private loadSpotifyScript() {
@@ -28,31 +32,21 @@ export class AudioPlayerComponent implements OnInit {
   }
 
   private handleSpotifyIframeApiReady(): void {
-    window.onSpotifyIframeApiReady = null;
     window.onSpotifyIframeApiReady = (IFrameAPI: any) => {
       let element = document.getElementById('embed-iframe');
       let callback = (EmbedController: any) => {
         EmbedController.loadUri('spotify:episode:7makk4oTQel546B0PZlDM5');
       };
-
       let options = {};
 
-      /* let callback = (EmbedController: any) => {
-        const button = document.getElementById('spotify-button');
-
-        button?.addEventListener('click', () => {
-          EmbedController.loadUri(button.dataset['spotifyId']);
-        });
-      }; */
-
-      this.audioPlayer.currentTrack.subscribe((track) => {
-        console.log('bibou', track);
-        callback = (EmbedController: any) => {
-          EmbedController.loadUri(track);
-        };
-
-        IFrameAPI.createController(element, options, callback);
-      });
+      IFrameAPI.createController(element, options, callback);
     };
+  }
+
+  private editIFrameSrcAttribute(trackId: string): void {
+    const iframe = document.querySelector('iframe');
+    if (iframe) {
+      iframe.src = `https://open.spotify.com/embed/track/${trackId}`;
+    }
   }
 }

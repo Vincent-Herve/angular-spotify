@@ -7,7 +7,11 @@ import {
 } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { TokenStorageService } from '../../services/token-storage/token-storage.service';
-import { Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -41,5 +45,9 @@ export class AuthInterceptor implements HttpInterceptor {
 }
 
 export const authInterceptor = [
-  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true,
+  },
 ];

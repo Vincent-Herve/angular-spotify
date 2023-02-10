@@ -29,8 +29,28 @@
         (click)="setCurrentTrackToAudioPlayer(track.uri)"
       >
         {{ track.name }}
+        <button
+          type="button"
+          (click)="
+            editTracksToAddToNewPlaylist($event, {
+              name: track.name,
+              uri: track.uri
+            })
+          "
+        >
+          {{
+            checkIfTrackIsIncludes({ name: track.name, uri: track.uri })
+              ? "Remove"
+              : "Add"
+          }}
+        </button>
       </li>
     </ul>
+    <div *ngIf="tracksToAddToNewPlaylist.length">
+      <span *ngFor="let track of tracksToAddToNewPlaylist">{{
+        track.name
+      }}</span>
+    </div>
     <div>
       <button type="submit">Create playlist</button>
     </div>

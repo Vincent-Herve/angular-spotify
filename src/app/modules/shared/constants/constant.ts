@@ -10,4 +10,4 @@ export const postUsersPlaylistUrl = (userId: string) =>
 export const addItemsToPlaylist = (playlistId: string) =>
   `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
 export const searchTracksUrl = (queryParam: string) =>
-  `https://api.spotify.com/v1/search?q=${queryParam}&type=track`;
+  `https://api.spotify.com/v1/search?q=${queryParam}&type=track&limit=5`;

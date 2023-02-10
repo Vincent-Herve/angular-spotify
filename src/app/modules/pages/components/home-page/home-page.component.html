@@ -1,20 +1,8 @@
 <div class="container">
-  <div *ngIf="userData">
+  <div *ngIf="userData$ | async as userData">
     <p [style.font-size]="'1.2rem'">My profil :</p>
     <p>Display name : {{ userData.display_name }}</p>
     <p>Email : {{ userData.email }}</p>
     <p>Country : {{ userData.country }}</p>
   </div>
 </div>
-
-<!-- <h2>oAuth info</h2>
-<table>
-  <tr>
-    <td>Access token</td>
-    <td>{{ accessToken }}</td>
-  </tr>
-  <tr>
-    <td>Expires at</td>
-    <td>{{ expiresAt | date : "M/d/yy, h:mm a" }}</td>
-  </tr>
-</table> -->

@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BehaviorSubject, concatMap, map } from 'rxjs';
+import { concatMap, map, ReplaySubject, Subject } from 'rxjs';
 import { SpotifyService } from 'src/app/modules/shared/services/api/spotify.service';
 import { AudioPlayerService } from 'src/app/modules/shared/services/audio-player/audio-player.service';
 import { TokenStorageService } from 'src/app/modules/shared/services/token-storage/token-storage.service';
+
+interface ITrack {
+  name: string;
+  uri: string;
+}
 
 @Component({
   selector: 'app-playlists-create',
@@ -13,7 +18,8 @@ import { TokenStorageService } from 'src/app/modules/shared/services/token-stora
 export class PlaylistsCreateComponent implements OnInit {
   createForm: FormGroup;
   search: string;
-  tracks$: BehaviorSubject<any> = new BehaviorSubject(false);
+  tracks$: Subject<ITrack[]> = new ReplaySubject();
+  tracksToAddToNewPlaylist: ITrack[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -24,8 +30,6 @@ export class PlaylistsCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-
-    this.tracks$.subscribe((data) => console.log(data));
   }
 
   submit(): void {
@@ -38,23 +42,44 @@ export class PlaylistsCreateComponent implements OnInit {
         concatMap((playlistId) =>
           this.spotifyService.addItemsToPlaylist(
             playlistId,
-            this.tracks$.getValue().map((track: any) => track.uri)
+            this.tracksToAddToNewPlaylist.map((track) => track.uri)
           )
         )
-      );
+      )
+      .subscribe();
   }
 
   searchTracks(): void {
-    console.log(this.search);
     this.spotifyService
       .searchTracks(this.search)
-      .pipe(map((data) => data.tracks.items))
-      .subscribe((res) => this.tracks$.next(res));
+      .pipe(
+        map((data) =>
+          data.tracks.items.map((item: any) => ({
+            name: item.name,
+            uri: item.uri,
+          }))
+        )
+      )
+      .subscribe((res: ITrack[]) => this.tracks$.next(res));
   }
 
-  setCurrentTrackToAudioPlayer(track: string): void {
-    console.log(track);
-    this.audioPlayer.setCurrentTrack(track);
+  setCurrentTrackToAudioPlayer(trackUri: string): void {
+    this.audioPlayer.setCurrentTrack(trackUri.split(':')[2]);
+  }
+
+  editTracksToAddToNewPlaylist(event: MouseEvent, track: ITrack): void {
+    event.stopPropagation();
+    if (this.checkIfTrackIsIncludes(track)) {
+      this.removeTrackToNewPlaylist(track);
+    } else {
+      this.addTrackToNewPlaylist(track);
+    }
+  }
+
+  checkIfTrackIsIncludes(track: ITrack): boolean {
+    return this.tracksToAddToNewPlaylist.some((item, i) => {
+      return this.tracksToAddToNewPlaylist[i].uri === track.uri;
+    });
   }
 
   private initForm(): void {
@@ -62,5 +87,15 @@ export class PlaylistsCreateComponent implements OnInit {
       name: [null, Validators.required],
       description: [null, Validators.required],
     });
+  }
+
+  private addTrackToNewPlaylist(track: ITrack): void {
+    this.tracksToAddToNewPlaylist = [...this.tracksToAddToNewPlaylist, track];
+  }
+
+  private removeTrackToNewPlaylist(track: ITrack): void {
+    this.tracksToAddToNewPlaylist = this.tracksToAddToNewPlaylist.filter(
+      (item) => item.uri !== track.uri
+    );
   }
 }

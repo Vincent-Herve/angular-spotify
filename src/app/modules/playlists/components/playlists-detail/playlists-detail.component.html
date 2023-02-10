@@ -1,1 +1,4 @@
-<p>Bibou detail</p>
+<div *ngIf="playlist$ | async as playlist">
+  <h2>My playlist detail</h2>
+  <p>Name: {{ playlist.name }}</p>
+</div>

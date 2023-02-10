@@ -21,7 +21,7 @@ const httpOptions = {
 export class SpotifyService {
   constructor(private http: HttpClient) {}
 
-  requestToken(body: any): Observable<any> {
+  requestToken(body: URLSearchParams): Observable<any> {
     return this.http.post(tokenUrl, body, httpOptions);
   }
 
@@ -41,8 +41,8 @@ export class SpotifyService {
     return this.http.post(postUsersPlaylistUrl(userId), body);
   }
 
-  addItemsToPlaylist(playlistId: string, body: any): Observable<any> {
-    return this.http.get(addItemsToPlaylist(playlistId));
+  addItemsToPlaylist(playlistId: string, uris: string[]): Observable<any> {
+    return this.http.post(addItemsToPlaylist(playlistId), { uris });
   }
 
   searchTracks(queryParam: string): Observable<any> {

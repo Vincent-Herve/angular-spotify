@@ -9,7 +9,7 @@ export class AudioPlayerService {
 
   constructor() {}
 
-  setCurrentTrack(track: string) {
-    this.currentTrack.next(track);
+  setCurrentTrack(trackId: string) {
+    this.currentTrack.next(trackId);
   }
 }
