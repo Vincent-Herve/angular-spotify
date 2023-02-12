@@ -1,7 +1,14 @@
 <div>
   <h2>My playlists</h2>
-  <ul>
-    <li *ngFor="let playlist of (playlists$ | async)?.items">
+  <ul
+    style="display: flex"
+    [style.flex-direction]="(deviceDetect.isMobile$ | async) ? 'column' : 'row'"
+    [style.align-items]="(deviceDetect.isMobile$ | async) ? '' : 'center'"
+  >
+    <li
+      *ngFor="let playlist of (playlists$ | async)?.items"
+      style="margin: 12px 6px"
+    >
       <a [routerLink]="[playlist.id, 'detail']"
         ><p-card>{{ playlist.name }}</p-card></a
       >

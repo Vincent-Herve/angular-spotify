@@ -1,6 +1,6 @@
 .audio-player {
   position: fixed;
-  bottom: -4%;
+  bottom: -2%;
   right: 0;
   left: 0;
   width: 80%;
@@ -15,4 +15,9 @@ button {
   left: 0;
   margin-left: auto;
   margin-right: auto;
+  color: white;
+  background-color: black;
+  border: none;
+  padding: 6px;
+  font-weight: bold;
 }

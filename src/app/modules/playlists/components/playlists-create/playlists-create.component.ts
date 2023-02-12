@@ -40,6 +40,10 @@ export class PlaylistsCreateComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  get name() {
+    return this.createForm.get('name')!;
+  }
+
   submit(): void {
     this.spotifyService
       .createUsersPlaylist(this.token.userId || '', {
@@ -87,7 +91,7 @@ export class PlaylistsCreateComponent implements OnInit, OnDestroy {
   private initForm(): void {
     this.createForm = this.fb.group({
       name: [null, Validators.required],
-      description: [null, Validators.required],
+      description: null,
     });
   }
 

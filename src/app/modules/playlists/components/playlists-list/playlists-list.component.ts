@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SpotifyService } from 'src/app/modules/shared/services/api/spotify.service';
+import { DeviceDetectService } from 'src/app/modules/shared/services/device-detect/device-detect.service';
 import { TokenStorageService } from 'src/app/modules/shared/services/token-storage/token-storage.service';
 
 @Component({
@@ -12,6 +13,7 @@ export class PlaylistsListComponent implements OnInit {
   playlists$: Observable<any>;
 
   constructor(
+    public deviceDetect: DeviceDetectService,
     private spotifyService: SpotifyService,
     private token: TokenStorageService
   ) {}

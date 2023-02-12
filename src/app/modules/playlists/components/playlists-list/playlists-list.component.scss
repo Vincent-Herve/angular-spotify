@@ -4,15 +4,7 @@
     padding: 0;
   }
 
-  li {
-    margin-right: 1rem ;
-  }
-
   ::ng-deep {
-    p-card {
-      box-sizing: border-box;
-    }
-
     .card div.p-card {
       border: dashed 1px #1BD760;
     }

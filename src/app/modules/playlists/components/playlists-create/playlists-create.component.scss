@@ -53,6 +53,8 @@ ul {
 }
 
 .track-chip {
+  display: flex;
+  align-items: center;
   border-radius: 7px;
   background-color: #EFEFEF;
   padding: 10px;

@@ -3,7 +3,7 @@
   [style.flex-direction]="(deviceDetect.isMobile$ | async) ? 'column' : 'row'"
 >
   <div>
-    <form [formGroup]="createForm" (ngSubmit)="submit()">
+    <form id="createForm" [formGroup]="createForm" (ngSubmit)="submit()">
       <input
         type="text"
         pInputText
@@ -11,6 +11,9 @@
         [style.margin-right]="'1rem'"
         formControlName="name"
       />
+      <div *ngIf="name.invalid && (name.dirty || name.touched)">
+        <small class="p-error">Name is required</small>
+      </div>
       <div style="margin: 4px 0">
         <input
           type="text"
@@ -29,6 +32,7 @@
     </form>
   </div>
   <div>
+    <!---->
     <div style="height: 50px">
       <input
         type="text"
@@ -38,13 +42,11 @@
         [(ngModel)]="search"
       />
 
-      <!---->
-
       <button class="search-btn" type="button" (click)="searchTracks()">
         Search
       </button>
     </div>
-
+    <!---->
     <!---->
     <ul *ngIf="tracks$ | async">
       <li class="list-item" *ngFor="let track of tracks$ | async">
@@ -84,13 +86,23 @@
       style="margin-top: 1rem; width: 340px; display: flex; flex-wrap: wrap"
     >
       <div class="track-chip" *ngFor="let track of tracksToAddToNewPlaylist">
-        {{ track.name }}
+        <p>{{ track.name }}</p>
+        <div>
+          <button
+            type="button"
+            style="border: none"
+            (click)="editTracksToAddToNewPlaylist($event, track)"
+          >
+            <i class="pi pi-times"></i>
+          </button>
+        </div>
       </div>
     </div>
     <button
       *ngIf="deviceDetect.isMobile$ | async"
       class="create-btn"
       type="submit"
+      form="createForm"
     >
       Create playlist
     </button>

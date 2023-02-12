@@ -37,7 +37,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
     this.toggleAudioPlayer = !this.toggleAudioPlayer;
   }
 
-  condition(): boolean {
+  checkDisplayBtn(): boolean {
     if (this.deviceDetect.isMobile$.getValue()) {
       if (this.toggleAudioPlayer) {
         return true;

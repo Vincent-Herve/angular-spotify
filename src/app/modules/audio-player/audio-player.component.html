@@ -1,4 +1,7 @@
-<div class="audio-player" [style.display]="condition() ? 'block' : 'none'">
+<div
+  class="audio-player"
+  [style.display]="checkDisplayBtn() ? 'block' : 'none'"
+>
   <div id="embed-iframe"></div>
 </div>
 
@@ -7,5 +10,17 @@
   type="button"
   (click)="handleToggleButton()"
 >
+  <i
+    class="pi"
+    style="vertical-align: middle; margin-right: 2rem"
+    [class.pi-angle-down]="!checkDisplayBtn()"
+    [class.pi-angle-up]="checkDisplayBtn()"
+  ></i>
   Audio Player
+  <i
+    class="pi"
+    style="vertical-align: middle; margin-left: 2rem"
+    [class.pi-angle-down]="!checkDisplayBtn()"
+    [class.pi-angle-up]="checkDisplayBtn()"
+  ></i>
 </button>
