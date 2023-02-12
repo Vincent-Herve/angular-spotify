@@ -1,9 +1,18 @@
 .audio-player {
   position: fixed;
-  bottom: 0;
+  bottom: -4%;
   right: 0;
   left: 0;
   width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+button {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
   margin-left: auto;
   margin-right: auto;
 }

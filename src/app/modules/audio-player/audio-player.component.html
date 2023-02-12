@@ -1,3 +1,11 @@
-<div class="audio-player">
+<div class="audio-player" [style.display]="condition() ? 'block' : 'none'">
   <div id="embed-iframe"></div>
 </div>
+
+<button
+  *ngIf="deviceDetect.isMobile$ | async"
+  type="button"
+  (click)="handleToggleButton()"
+>
+  Audio Player
+</button>

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { concatMap, map, ReplaySubject, Subject } from 'rxjs';
+import { concatMap, map, ReplaySubject, Subject, takeUntil } from 'rxjs';
 import { SpotifyService } from 'src/app/modules/shared/services/api/spotify.service';
 import { AudioPlayerService } from 'src/app/modules/shared/services/audio-player/audio-player.service';
+import { DeviceDetectService } from 'src/app/modules/shared/services/device-detect/device-detect.service';
 import { TokenStorageService } from 'src/app/modules/shared/services/token-storage/token-storage.service';
 
 interface ITrack {
@@ -15,13 +16,15 @@ interface ITrack {
   templateUrl: 'playlists-create.component.html',
   styleUrls: ['playlists-create.component.scss'],
 })
-export class PlaylistsCreateComponent implements OnInit {
+export class PlaylistsCreateComponent implements OnInit, OnDestroy {
   createForm: FormGroup;
   search: string;
   tracks$: Subject<ITrack[]> = new ReplaySubject();
   tracksToAddToNewPlaylist: ITrack[] = [];
+  destroy$: Subject<boolean> = new Subject();
 
   constructor(
+    public deviceDetect: DeviceDetectService,
     private fb: FormBuilder,
     private spotifyService: SpotifyService,
     private token: TokenStorageService,
@@ -32,12 +35,18 @@ export class PlaylistsCreateComponent implements OnInit {
     this.initForm();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
+
   submit(): void {
     this.spotifyService
       .createUsersPlaylist(this.token.userId || '', {
         ...this.createForm.value,
       })
       .pipe(
+        takeUntil(this.destroy$),
         map((data) => data.id),
         concatMap((playlistId) =>
           this.spotifyService.addItemsToPlaylist(
@@ -52,19 +61,12 @@ export class PlaylistsCreateComponent implements OnInit {
   searchTracks(): void {
     this.spotifyService
       .searchTracks(this.search)
-      .pipe(
-        map((data) =>
-          data.tracks.items.map((item: any) => ({
-            name: item.name,
-            uri: item.uri,
-          }))
-        )
-      )
+      .pipe(takeUntil(this.destroy$), map(this.mapDataTracksToITrack))
       .subscribe((res: ITrack[]) => this.tracks$.next(res));
   }
 
   setCurrentTrackToAudioPlayer(trackUri: string): void {
-    this.audioPlayer.setCurrentTrack(trackUri.split(':')[2]);
+    this.audioPlayer.setCurrentTrack(this.fromTrackUriToTrackId(trackUri));
   }
 
   editTracksToAddToNewPlaylist(event: MouseEvent, track: ITrack): void {
@@ -87,6 +89,17 @@ export class PlaylistsCreateComponent implements OnInit {
       name: [null, Validators.required],
       description: [null, Validators.required],
     });
+  }
+
+  private fromTrackUriToTrackId(trackUri: string): string {
+    return trackUri.split(':')[2];
+  }
+
+  private mapDataTracksToITrack(data: any): ITrack[] {
+    return data.tracks.items.map((item: any) => ({
+      name: item.name,
+      uri: item.uri,
+    }));
   }
 
   private addTrackToNewPlaylist(track: ITrack): void {

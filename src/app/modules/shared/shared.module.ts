@@ -5,6 +5,7 @@ import { SpotifyService } from './services/api/spotify.service';
 import { AudioPlayerService } from './services/audio-player/audio-player.service';
 import { AuthUtilsService } from './services/auth/auth-utils.service';
 import { AuthService } from './services/auth/auth.service';
+import { DeviceDetectService } from './services/device-detect/device-detect.service';
 import { TokenStorageService } from './services/token-storage/token-storage.service';
 import { UtilsService } from './services/utils/utils.service';
 
@@ -16,6 +17,7 @@ const providers = [
   SpotifyService,
   UtilsService,
   AudioPlayerService,
+  DeviceDetectService,
   authInterceptor,
 ];
 

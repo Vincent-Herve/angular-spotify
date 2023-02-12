@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DeviceDetectService } from './modules/shared/services/device-detect/device-detect.service';
 
 declare global {
   interface Window {
@@ -14,5 +15,9 @@ declare global {
 export class AppComponent implements OnInit {
   title = 'angular-spotify';
 
-  ngOnInit(): void {}
+  constructor(private deviceDetect: DeviceDetectService) {}
+
+  ngOnInit(): void {
+    this.deviceDetect.resizeWindow();
+  }
 }

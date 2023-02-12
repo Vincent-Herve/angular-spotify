@@ -1,3 +1,60 @@
 ul {
   overflow: scroll;
+  padding: 0;
+}
+
+.track-btn {
+  border-radius: 7px;
+  border: 0;
+  background-color: #191414;
+  color: #fff;
+  padding: 10px;
+
+  &:hover {
+    background-color: #1BD760;;
+  }
+}
+
+.edit-tracks-btn {
+  border-radius: 7px;
+  border: 0;
+  color: black;
+  padding: 10px;
+  margin-left: .5rem;
+  font-size: 1rem;
+}
+
+.search-btn {
+  height: 100%;
+  color: white;
+  background-color: #1BD760;
+  margin-left: .4rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.create-btn {
+  color: white;
+  background-color: #1F74DE;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.list-item {
+  display: flex;
+  margin: 4px 0;
+}
+
+.track-chip {
+  border-radius: 7px;
+  background-color: #EFEFEF;
+  padding: 10px;
+  margin: 4px 4px 4px 0;
 }

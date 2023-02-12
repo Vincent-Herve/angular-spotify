@@ -1,35 +1,62 @@
-<div>
-  <h2>Create one playlist</h2>
-  <form [formGroup]="createForm" (ngSubmit)="submit()">
-    <input
-      type="text"
-      pInputText
-      placeholder="Name"
-      [style.margin-right]="'1rem'"
-      formControlName="name"
-    />
-    <input
-      type="text"
-      pInputText
-      placeholder="Description"
-      formControlName="description"
-    />
-    <p>Search music and add it to your new playlist</p>
-    <input
-      type="text"
-      pInputText
-      placeholder="Search"
-      [(ngModel)]="search"
-      [ngModelOptions]="{ standalone: true }"
-    />
-    <button type="button" (click)="searchTracks()">Search</button>
-    <ul *ngIf="tracks$ | async">
-      <li
-        *ngFor="let track of tracks$ | async"
-        (click)="setCurrentTrackToAudioPlayer(track.uri)"
+<div
+  style="display: flex; padding-bottom: 2rem"
+  [style.flex-direction]="(deviceDetect.isMobile$ | async) ? 'column' : 'row'"
+>
+  <div>
+    <form [formGroup]="createForm" (ngSubmit)="submit()">
+      <input
+        type="text"
+        pInputText
+        placeholder="Name"
+        [style.margin-right]="'1rem'"
+        formControlName="name"
+      />
+      <div style="margin: 4px 0">
+        <input
+          type="text"
+          pInputText
+          placeholder="Description"
+          formControlName="description"
+        />
+      </div>
+      <button
+        *ngIf="!(deviceDetect.isMobile$ | async)"
+        class="create-btn"
+        type="submit"
       >
-        {{ track.name }}
+        Create playlist
+      </button>
+    </form>
+  </div>
+  <div>
+    <div style="height: 50px">
+      <input
+        type="text"
+        style="height: 100%"
+        pInputText
+        placeholder="Search track"
+        [(ngModel)]="search"
+      />
+
+      <!---->
+
+      <button class="search-btn" type="button" (click)="searchTracks()">
+        Search
+      </button>
+    </div>
+
+    <!---->
+    <ul *ngIf="tracks$ | async">
+      <li class="list-item" *ngFor="let track of tracks$ | async">
         <button
+          class="track-btn"
+          type="button"
+          (click)="setCurrentTrackToAudioPlayer(track.uri)"
+        >
+          {{ track.name }}
+        </button>
+        <button
+          class="edit-tracks-btn"
           type="button"
           (click)="
             editTracksToAddToNewPlaylist($event, {
@@ -38,21 +65,34 @@
             })
           "
         >
-          {{
-            checkIfTrackIsIncludes({ name: track.name, uri: track.uri })
-              ? "Remove"
-              : "Add"
-          }}
+          <i
+            class="pi"
+            [class.pi-plus]="
+              !checkIfTrackIsIncludes({ name: track.name, uri: track.uri })
+            "
+            [class.pi-delete-left]="
+              checkIfTrackIsIncludes({ name: track.name, uri: track.uri })
+            "
+            style="font-size: 1rem"
+          ></i>
         </button>
       </li>
     </ul>
-    <div *ngIf="tracksToAddToNewPlaylist.length">
-      <span *ngFor="let track of tracksToAddToNewPlaylist">{{
-        track.name
-      }}</span>
+    <!---->
+    <div
+      *ngIf="tracksToAddToNewPlaylist.length"
+      style="margin-top: 1rem; width: 340px; display: flex; flex-wrap: wrap"
+    >
+      <div class="track-chip" *ngFor="let track of tracksToAddToNewPlaylist">
+        {{ track.name }}
+      </div>
     </div>
-    <div>
-      <button type="submit">Create playlist</button>
-    </div>
-  </form>
+    <button
+      *ngIf="deviceDetect.isMobile$ | async"
+      class="create-btn"
+      type="submit"
+    >
+      Create playlist
+    </button>
+  </div>
 </div>

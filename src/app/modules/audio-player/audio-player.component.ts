@@ -1,21 +1,52 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { AudioPlayerService } from '../shared/services/audio-player/audio-player.service';
+import { DeviceDetectService } from '../shared/services/device-detect/device-detect.service';
 
 @Component({
   selector: 'app-audio-player',
   templateUrl: 'audio-player.component.html',
   styleUrls: ['audio-player.component.scss'],
 })
-export class AudioPlayerComponent implements OnInit {
-  constructor(private audioPlayer: AudioPlayerService) {}
+export class AudioPlayerComponent implements OnInit, OnDestroy {
+  toggleAudioPlayer = false;
+  destroy$: Subject<boolean> = new Subject();
+
+  constructor(
+    public deviceDetect: DeviceDetectService,
+    private audioPlayer: AudioPlayerService
+  ) {}
 
   ngOnInit() {
     this.loadSpotifyScript();
     this.handleSpotifyIframeApiReady();
 
-    this.audioPlayer.currentTrack.subscribe((trackId) => {
-      this.editIFrameSrcAttribute(trackId);
-    });
+    this.audioPlayer.currentTrack
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((trackId) => {
+        this.editIFrameSrcAttribute(trackId);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
+
+  handleToggleButton(): void {
+    this.toggleAudioPlayer = !this.toggleAudioPlayer;
+  }
+
+  condition(): boolean {
+    if (this.deviceDetect.isMobile$.getValue()) {
+      if (this.toggleAudioPlayer) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   private loadSpotifyScript() {
@@ -37,7 +68,9 @@ export class AudioPlayerComponent implements OnInit {
       let callback = (EmbedController: any) => {
         EmbedController.loadUri('spotify:episode:7makk4oTQel546B0PZlDM5');
       };
-      let options = {};
+      let options = {
+        height: '200',
+      };
 
       IFrameAPI.createController(element, options, callback);
     };
