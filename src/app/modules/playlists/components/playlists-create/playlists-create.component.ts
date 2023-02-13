@@ -1,15 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { concatMap, map, ReplaySubject, Subject, takeUntil } from 'rxjs';
 import { SpotifyService } from 'src/app/modules/shared/services/api/spotify.service';
-import { AudioPlayerService } from 'src/app/modules/shared/services/audio-player/audio-player.service';
 import { DeviceDetectService } from 'src/app/modules/shared/services/device-detect/device-detect.service';
 import { TokenStorageService } from 'src/app/modules/shared/services/token-storage/token-storage.service';
-
-interface ITrack {
-  name: string;
-  uri: string;
-}
+import { ITrack } from '../interfaces';
+import { PlaylistsTrackListComponent } from '../playlists-track-list/playlists-track-list.component';
 
 @Component({
   selector: 'app-playlists-create',
@@ -17,10 +14,13 @@ interface ITrack {
   styleUrls: ['playlists-create.component.scss'],
 })
 export class PlaylistsCreateComponent implements OnInit, OnDestroy {
+  @ViewChild(PlaylistsTrackListComponent)
+  playlistsTrackList: PlaylistsTrackListComponent;
+
   createForm: FormGroup;
-  search: string;
-  tracks$: Subject<ITrack[]> = new ReplaySubject();
+  tracks$: ReplaySubject<ITrack[]> = new ReplaySubject();
   tracksToAddToNewPlaylist: ITrack[] = [];
+  createdPlaylistError = false;
   destroy$: Subject<boolean> = new Subject();
 
   constructor(
@@ -28,7 +28,7 @@ export class PlaylistsCreateComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private spotifyService: SpotifyService,
     private token: TokenStorageService,
-    private audioPlayer: AudioPlayerService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -59,33 +59,19 @@ export class PlaylistsCreateComponent implements OnInit, OnDestroy {
           )
         )
       )
-      .subscribe();
+      .subscribe({
+        next: () => this.router.navigate(['/playlists']),
+        error: () => {
+          this.createdPlaylistError = true;
+          setTimeout(() => {
+            this.createdPlaylistError = false;
+          }, 2000);
+        },
+      });
   }
 
-  searchTracks(): void {
-    this.spotifyService
-      .searchTracks(this.search)
-      .pipe(takeUntil(this.destroy$), map(this.mapDataTracksToITrack))
-      .subscribe((res: ITrack[]) => this.tracks$.next(res));
-  }
-
-  setCurrentTrackToAudioPlayer(trackUri: string): void {
-    this.audioPlayer.setCurrentTrack(this.fromTrackUriToTrackId(trackUri));
-  }
-
-  editTracksToAddToNewPlaylist(event: MouseEvent, track: ITrack): void {
-    event.stopPropagation();
-    if (this.checkIfTrackIsIncludes(track)) {
-      this.removeTrackToNewPlaylist(track);
-    } else {
-      this.addTrackToNewPlaylist(track);
-    }
-  }
-
-  checkIfTrackIsIncludes(track: ITrack): boolean {
-    return this.tracksToAddToNewPlaylist.some((item, i) => {
-      return this.tracksToAddToNewPlaylist[i].uri === track.uri;
-    });
+  handleTracksArrayEdited(tracksToAddToNewPlaylist: ITrack[]): void {
+    this.tracksToAddToNewPlaylist = tracksToAddToNewPlaylist;
   }
 
   private initForm(): void {
@@ -93,26 +79,5 @@ export class PlaylistsCreateComponent implements OnInit, OnDestroy {
       name: [null, Validators.required],
       description: null,
     });
-  }
-
-  private fromTrackUriToTrackId(trackUri: string): string {
-    return trackUri.split(':')[2];
-  }
-
-  private mapDataTracksToITrack(data: any): ITrack[] {
-    return data.tracks.items.map((item: any) => ({
-      name: item.name,
-      uri: item.uri,
-    }));
-  }
-
-  private addTrackToNewPlaylist(track: ITrack): void {
-    this.tracksToAddToNewPlaylist = [...this.tracksToAddToNewPlaylist, track];
-  }
-
-  private removeTrackToNewPlaylist(track: ITrack): void {
-    this.tracksToAddToNewPlaylist = this.tracksToAddToNewPlaylist.filter(
-      (item) => item.uri !== track.uri
-    );
   }
 }

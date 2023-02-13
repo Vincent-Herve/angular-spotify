@@ -1,1 +1,13 @@
+<div style="height: 50px">
+  <input
+    type="text"
+    style="height: 100%"
+    pInputText
+    placeholder="Search track"
+    [(ngModel)]="search"
+  />
 
+  <button class="search-btn" type="button" (click)="searchTracks()">
+    Search
+  </button>
+</div>

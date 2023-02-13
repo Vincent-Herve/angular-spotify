@@ -1,1 +1,33 @@
-
+<ul *ngIf="tracks$ | async">
+  <li class="list-item" *ngFor="let track of tracks$ | async">
+    <button
+      class="track-btn"
+      type="button"
+      (click)="setCurrentTrackToAudioPlayer(track.uri)"
+    >
+      {{ track.name }}
+    </button>
+    <button
+      *ngIf="!onlyList"
+      class="edit-tracks-btn"
+      type="button"
+      (click)="
+        editTracksArray($event, {
+          name: track.name,
+          uri: track.uri
+        })
+      "
+    >
+      <i
+        class="pi"
+        [class.pi-plus]="
+          !checkIfTrackIsIncludes({ name: track.name, uri: track.uri })
+        "
+        [class.pi-delete-left]="
+          checkIfTrackIsIncludes({ name: track.name, uri: track.uri })
+        "
+        style="font-size: 1rem"
+      ></i>
+    </button>
+  </li>
+</ul>

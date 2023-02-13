@@ -7,11 +7,16 @@ import { CardModule } from 'primeng/card';
 import { LayoutRoutingModule } from '../layout/layout-routing.module';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PlaylistsTrackSearchComponent } from './components/playlists-track-search/playlists-track-search.component';
+import { PlaylistsTrackListComponent } from './components/playlists-track-list/playlists-track-list.component';
+import { MessageModule } from 'primeng/message';
 
 const playlistsComponents = [
   PlaylistsListComponent,
   PlaylistsCreateComponent,
   PlaylistsDetailComponent,
+  PlaylistsTrackSearchComponent,
+  PlaylistsTrackListComponent,
 ];
 
 @NgModule({
@@ -22,6 +27,7 @@ const playlistsComponents = [
     InputTextModule,
     FormsModule,
     ReactiveFormsModule,
+    MessageModule,
   ],
   exports: [...playlistsComponents],
   declarations: [...playlistsComponents],

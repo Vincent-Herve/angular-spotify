@@ -32,55 +32,17 @@
     </form>
   </div>
   <div>
-    <!---->
-    <div style="height: 50px">
-      <input
-        type="text"
-        style="height: 100%"
-        pInputText
-        placeholder="Search track"
-        [(ngModel)]="search"
-      />
+    <app-playlists-track-search
+      [tracks$]="tracks$"
+    ></app-playlists-track-search>
 
-      <button class="search-btn" type="button" (click)="searchTracks()">
-        Search
-      </button>
-    </div>
-    <!---->
-    <!---->
-    <ul *ngIf="tracks$ | async">
-      <li class="list-item" *ngFor="let track of tracks$ | async">
-        <button
-          class="track-btn"
-          type="button"
-          (click)="setCurrentTrackToAudioPlayer(track.uri)"
-        >
-          {{ track.name }}
-        </button>
-        <button
-          class="edit-tracks-btn"
-          type="button"
-          (click)="
-            editTracksToAddToNewPlaylist($event, {
-              name: track.name,
-              uri: track.uri
-            })
-          "
-        >
-          <i
-            class="pi"
-            [class.pi-plus]="
-              !checkIfTrackIsIncludes({ name: track.name, uri: track.uri })
-            "
-            [class.pi-delete-left]="
-              checkIfTrackIsIncludes({ name: track.name, uri: track.uri })
-            "
-            style="font-size: 1rem"
-          ></i>
-        </button>
-      </li>
-    </ul>
-    <!---->
+    <app-playlists-track-list
+      [tracks$]="tracks$"
+      [tracksArray]="tracksToAddToNewPlaylist"
+      [onlyList]="false"
+      (tracksArrayEdited)="handleTracksArrayEdited($event)"
+    ></app-playlists-track-list>
+
     <div
       *ngIf="tracksToAddToNewPlaylist.length"
       style="margin-top: 1rem; width: 340px; display: flex; flex-wrap: wrap"
@@ -91,7 +53,7 @@
           <button
             type="button"
             style="border: none"
-            (click)="editTracksToAddToNewPlaylist($event, track)"
+            (click)="playlistsTrackList.editTracksArray($event, track)"
           >
             <i class="pi pi-times"></i>
           </button>
@@ -107,4 +69,11 @@
       Create playlist
     </button>
   </div>
+</div>
+<div>
+  <p-message
+    *ngIf="createdPlaylistError"
+    severity="error"
+    text="An error has occurred"
+  ></p-message>
 </div>

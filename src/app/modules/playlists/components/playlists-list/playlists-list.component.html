@@ -1,7 +1,7 @@
-<div>
+<div style="padding-bottom: 2rem">
   <h2>My playlists</h2>
   <ul
-    style="display: flex"
+    style="display: flex; flex-wrap: wrap"
     [style.flex-direction]="(deviceDetect.isMobile$ | async) ? 'column' : 'row'"
     [style.align-items]="(deviceDetect.isMobile$ | async) ? '' : 'center'"
   >
@@ -14,7 +14,13 @@
       >
     </li>
     <li>
-      <a routerLink="create"><p-card class="card">Add playlist</p-card></a>
+      <a routerLink="create"
+        ><p-card class="card"
+          ><span style="text-transform: uppercase; font-weight: bold"
+            >Add playlist</span
+          ></p-card
+        ></a
+      >
     </li>
   </ul>
 </div>
