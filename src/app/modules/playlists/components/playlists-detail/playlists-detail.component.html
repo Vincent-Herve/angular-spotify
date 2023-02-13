@@ -1,4 +1,9 @@
 <div *ngIf="playlist$ | async as playlist">
   <h2>My playlist detail</h2>
   <p>Name: {{ playlist.name }}</p>
+  <p>Description: {{ playlist.description }}</p>
+  <app-playlists-track-list
+    [tracks$]="tracks$"
+    [onlyList]="true"
+  ></app-playlists-track-list>
 </div>
